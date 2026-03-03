@@ -335,6 +335,7 @@
   color: var(--slate-500);
   font-size: 16px;
   transition: all .2s;
+  z-index: 1;
 }
 
 .chat-drawer__close:hover {
@@ -504,7 +505,9 @@
    STRUCTURED PANEL – PATIENT MINI-FORM
    ================================================================ */
 .sp-patient-form {
-  margin-top: 16px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--slate-200);
   text-align: left;
 }
 

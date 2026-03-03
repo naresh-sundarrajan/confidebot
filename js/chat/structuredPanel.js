@@ -5,6 +5,10 @@ import { initDobPicker } from '../ui/dobPicker.js';
 let panelEl = null;
 let hasAutoOpened = false;
 
+function hasPatientInfo(patient) {
+  return patient.givenName || patient.familyName || patient.birthDate || patient.gender;
+}
+
 export function initStructuredPanel() {
   panelEl = document.getElementById('chat-structured-panel');
   renderPanel();
@@ -59,6 +63,7 @@ function renderPanel() {
       ${PHQ9_ITEMS.map((q, i) => renderQuestion(q, i, state)).join('')}
     </div>
 
+    ${hasPatientInfo(state.patient) || state.complete ? renderPatientSection(state) : ''}
     ${state.complete ? renderCompletionSection(score, state) : ''}
   `;
 
@@ -130,6 +135,35 @@ function renderQuestion(q, index, state) {
   `;
 }
 
+function renderPatientSection(state) {
+  return `
+    <div class="sp-patient-form">
+      <h4 class="sp-form-title">Patient Information</h4>
+      <div class="sp-form-field">
+        <label for="chat-given-name">First Name</label>
+        <input type="text" id="chat-given-name" placeholder="Jane" autocomplete="given-name">
+      </div>
+      <div class="sp-form-field">
+        <label for="chat-family-name">Last Name</label>
+        <input type="text" id="chat-family-name" placeholder="Doe" autocomplete="family-name">
+      </div>
+      <div class="sp-form-field">
+        <label for="chat-birth-date">Date of Birth</label>
+        <input type="hidden" id="chat-birth-date">
+      </div>
+      <div class="sp-form-field">
+        <label for="chat-gender">Gender</label>
+        <select id="chat-gender">
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+          <option value="other">Other</option>
+          <option value="unknown">Unknown</option>
+        </select>
+      </div>
+    </div>
+  `;
+}
+
 function renderCompletionSection(score, state) {
   const band = classifySeverity(score);
   return `
@@ -139,31 +173,6 @@ function renderCompletionSection(score, state) {
         <span class="sp-score-max">/ 27</span>
       </div>
       <span class="severity-badge severity-badge--${band.css}">${band.severity}</span>
-
-      <div class="sp-patient-form">
-        <h4 class="sp-form-title">Patient Information</h4>
-        <div class="sp-form-field">
-          <label for="chat-given-name">First Name</label>
-          <input type="text" id="chat-given-name" placeholder="Jane" autocomplete="given-name">
-        </div>
-        <div class="sp-form-field">
-          <label for="chat-family-name">Last Name</label>
-          <input type="text" id="chat-family-name" placeholder="Doe" autocomplete="family-name">
-        </div>
-        <div class="sp-form-field">
-          <label for="chat-birth-date">Date of Birth</label>
-          <input type="hidden" id="chat-birth-date">
-        </div>
-        <div class="sp-form-field">
-          <label for="chat-gender">Gender</label>
-          <select id="chat-gender">
-            <option value="female">Female</option>
-            <option value="male">Male</option>
-            <option value="other">Other</option>
-            <option value="unknown">Unknown</option>
-          </select>
-        </div>
-      </div>
 
       <button class="btn btn--primary sp-submit-btn" id="chat-submit-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
