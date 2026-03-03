@@ -1,5 +1,6 @@
 import { PHQ9_ITEMS, ANSWER_OPTIONS, classifySeverity } from '../data/phq9.js';
 import { getState, overrideScore, subscribe, answeredCount, totalScore, openPanel } from './chatState.js';
+import { initDobPicker } from '../ui/dobPicker.js';
 
 let panelEl = null;
 let hasAutoOpened = false;
@@ -80,6 +81,9 @@ function renderPanel() {
     }
   }
 
+  // Init custom DOB picker for the chat panel
+  initDobPicker('chat-birth-date');
+
   // Attach override listeners
   panelEl.querySelectorAll('.sp-select').forEach(sel => {
     sel.addEventListener('change', (e) => {
@@ -148,7 +152,7 @@ function renderCompletionSection(score, state) {
         </div>
         <div class="sp-form-field">
           <label for="chat-birth-date">Date of Birth</label>
-          <input type="date" id="chat-birth-date">
+          <input type="hidden" id="chat-birth-date">
         </div>
         <div class="sp-form-field">
           <label for="chat-gender">Gender</label>

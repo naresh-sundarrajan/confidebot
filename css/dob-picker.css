@@ -1,0 +1,349 @@
+/* ================================================================
+   CUSTOM DOB PICKER
+   ================================================================ */
+
+/* Wrapper keeps trigger + dropdown positioned together */
+.dob-picker {
+  position: relative;
+}
+
+/* Trigger button – matches .form-group input styling */
+.dob-picker__trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--slate-800);
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.dob-picker__trigger:focus {
+  border-color: var(--teal-500);
+  box-shadow: 0 0 0 3px rgba(20,184,166,.12);
+  outline: none;
+}
+
+.dob-picker__trigger--placeholder {
+  color: var(--slate-400);
+}
+
+.dob-picker__trigger-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--slate-400);
+}
+
+/* ================================================================
+   DROPDOWN (desktop)
+   ================================================================ */
+.dob-picker__dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 1000;
+  width: 300px;
+  background: #fff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 16px;
+  animation: dobFadeIn .15s ease;
+}
+
+.dob-picker__dropdown.open {
+  display: block;
+}
+
+/* Backdrop (mobile only, defined below) */
+.dob-picker__backdrop {
+  display: none;
+}
+
+/* ================================================================
+   DAY VIEW – NAV HEADER
+   ================================================================ */
+.dob-picker__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.dob-picker__nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--slate-600);
+  font-size: 14px;
+  transition: all .15s;
+}
+
+.dob-picker__nav-btn:hover {
+  background: var(--slate-50);
+  border-color: var(--slate-300);
+}
+
+.dob-picker__nav-title {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--slate-800);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  transition: all .15s;
+}
+
+.dob-picker__nav-title:hover {
+  background: var(--slate-50);
+  color: var(--teal-700);
+}
+
+/* ================================================================
+   DAY VIEW – WEEKDAY HEADERS
+   ================================================================ */
+.dob-picker__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.dob-picker__weekday {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--slate-400);
+  text-transform: uppercase;
+  text-align: center;
+  padding: 4px 0;
+}
+
+/* ================================================================
+   DAY VIEW – DAY GRID
+   ================================================================ */
+.dob-picker__days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.dob-picker__day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin: 0 auto;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--slate-700);
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.dob-picker__day:hover:not(:disabled):not(.dob-picker__day--selected) {
+  background: var(--slate-100);
+}
+
+.dob-picker__day--today {
+  font-weight: 600;
+  color: var(--teal-700);
+}
+
+.dob-picker__day--selected {
+  background: var(--teal-600);
+  color: #fff;
+  font-weight: 600;
+}
+
+.dob-picker__day--selected:hover {
+  background: var(--teal-700);
+}
+
+.dob-picker__day--outside {
+  color: var(--slate-300);
+}
+
+.dob-picker__day:disabled {
+  color: var(--slate-300);
+  cursor: not-allowed;
+}
+
+/* ================================================================
+   MONTH/YEAR VIEW
+   ================================================================ */
+.dob-picker__my-view {
+  display: none;
+}
+
+.dob-picker__my-view.open {
+  display: block;
+}
+
+.dob-picker__day-view {
+  display: block;
+}
+
+.dob-picker__day-view.hidden {
+  display: none;
+}
+
+/* Year navigation */
+.dob-picker__year-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.dob-picker__year-label {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--slate-800);
+}
+
+/* Month grid */
+.dob-picker__months {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.dob-picker__month {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--slate-700);
+  background: transparent;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-sm);
+  padding: 10px 4px;
+  cursor: pointer;
+  transition: all .15s;
+  text-align: center;
+}
+
+.dob-picker__month:hover:not(.dob-picker__month--selected) {
+  background: var(--slate-50);
+  border-color: var(--slate-300);
+}
+
+.dob-picker__month--selected {
+  background: var(--teal-600);
+  color: #fff;
+  border-color: var(--teal-600);
+  font-weight: 600;
+}
+
+.dob-picker__month--selected:hover {
+  background: var(--teal-700);
+  border-color: var(--teal-700);
+}
+
+/* Done / Cancel actions */
+.dob-picker__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.dob-picker__actions .btn {
+  font-size: 13px;
+  padding: 8px 18px;
+}
+
+/* ================================================================
+   MOBILE – BOTTOM SHEET
+   ================================================================ */
+@media (max-width: 640px) {
+  .dob-picker__backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(15,23,42,.4);
+    backdrop-filter: blur(2px);
+  }
+
+  .dob-picker__backdrop.open {
+    display: block;
+    animation: dobFadeIn .2s ease;
+  }
+
+  .dob-picker__dropdown {
+    position: fixed;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-height: 80vh;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    padding: 20px 16px calc(env(safe-area-inset-bottom, 0px) + 20px);
+    overflow-y: auto;
+    animation: dobSlideUp .25s cubic-bezier(.22,1,.36,1);
+  }
+
+  .dob-picker__day {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .dob-picker__month {
+    padding: 14px 4px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+
+  .dob-picker__nav-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .dob-picker__trigger {
+    min-height: 44px;
+  }
+}
+
+/* Structured panel (chat drawer) – smaller trigger */
+.sp-form-field .dob-picker__trigger {
+  font-size: 13px;
+  padding: 8px 10px;
+}
+
+/* ================================================================
+   ANIMATIONS
+   ================================================================ */
+@keyframes dobFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes dobSlideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}

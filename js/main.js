@@ -5,6 +5,7 @@ import { submitQuestionnaire } from './actions/submit.js';
 import { downloadDatabase } from './actions/download.js';
 import { clearDatabase } from './actions/clear.js';
 import { resetForm } from './actions/reset.js';
+import { initDobPicker } from './ui/dobPicker.js';
 
 // Tabs
 initTabs();
@@ -23,6 +24,9 @@ document.getElementById('modal-close').addEventListener('click', () => {
   document.getElementById('result-modal').classList.remove('active');
   resetForm();
 });
+
+// Custom DOB picker for questionnaire tab
+initDobPicker('birth-date');
 
 // Init
 renderQuestions();
