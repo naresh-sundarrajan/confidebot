@@ -3,6 +3,7 @@ import { initGemini, sendMessage, sendGreeting } from '../chat/geminiClient.js';
 import { initStructuredPanel } from '../chat/structuredPanel.js';
 import { submitChatAssessment } from '../actions/submitChat.js';
 import { showToast } from '../utils/toast.js';
+import { formatMarkdown } from '../utils/formatMarkdown.js';
 
 let initialized = false;
 let isSending = false;
@@ -126,8 +127,8 @@ async function handleSend() {
   } catch (err) {
     console.error(err);
     showTypingState(botBubble, false);
-    botBubble.querySelector('.chat-bubble__text').textContent =
-      'Sorry, something went wrong. Please try again.';
+    botBubble.querySelector('.chat-bubble__text').innerHTML =
+      formatMarkdown('Sorry, something went wrong. Please try again.');
     showToast('Chat error: ' + err.message, 'error');
   }
 
@@ -154,8 +155,8 @@ async function startGreeting() {
   } catch (err) {
     console.error(err);
     showTypingState(botBubble, false);
-    botBubble.querySelector('.chat-bubble__text').textContent =
-      'Hello! I\'m here to walk you through the PHQ-9 depression screening. Let\'s begin — over the past two weeks, how often have you had little interest or pleasure in doing things?';
+    botBubble.querySelector('.chat-bubble__text').innerHTML =
+      formatMarkdown('Hello! I\'m here to walk you through the PHQ-9 depression screening. Let\'s begin — over the past two weeks, how often have you had little interest or pleasure in doing things?');
   }
 
   setSendEnabled(true);
@@ -170,7 +171,10 @@ function appendMessage(role, text) {
 
   const textEl = document.createElement('div');
   textEl.className = 'chat-bubble__text';
-  if (text) textEl.textContent = text;
+  if (text) {
+    textEl.dataset.raw = text;
+    textEl.innerHTML = formatMarkdown(text);
+  }
   wrapper.appendChild(textEl);
 
   messagesEl.appendChild(wrapper);
@@ -180,7 +184,9 @@ function appendMessage(role, text) {
 
 function appendToMessage(bubble, chunk) {
   const textEl = bubble.querySelector('.chat-bubble__text');
-  textEl.textContent += chunk;
+  const raw = (textEl.dataset.raw || '') + chunk;
+  textEl.dataset.raw = raw;
+  textEl.innerHTML = formatMarkdown(raw);
   scrollToBottom();
 }
 
