@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/chat.css">
 </head>
 <body>
 
@@ -27,6 +28,10 @@
     <button class="tab-btn active" data-tab="questionnaire" role="tab" aria-selected="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
       Questionnaire
+    </button>
+    <button class="tab-btn" data-tab="chat" role="tab" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Chat Assessment
     </button>
     <button class="tab-btn" data-tab="database" role="tab" aria-selected="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
@@ -95,7 +100,55 @@
   </div>
 
   <!-- ============================================================
-       TAB 2: DATABASE EXPLORER
+       TAB 2: CHAT ASSESSMENT
+       ============================================================ -->
+  <div id="panel-chat" class="tab-panel">
+
+    <!-- API Key Screen -->
+    <div class="chat-api-key-screen" id="chat-api-key-screen">
+      <div class="chat-api-key-card">
+        <div class="chat-api-key-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+        </div>
+        <h3>Connect to Gemini</h3>
+        <p>Enter your Google Gemini API key to start the conversational PHQ-9 assessment. Your key is stored only in this browser session.</p>
+        <div class="form-group">
+          <label for="chat-api-key">API Key</label>
+          <input type="password" id="chat-api-key" placeholder="AIza...">
+        </div>
+        <div class="chat-api-key-error" id="chat-api-key-error"></div>
+        <button class="btn btn--primary" id="chat-connect-btn" style="width:100%;justify-content:center">Connect</button>
+      </div>
+    </div>
+
+    <!-- Chat Interface (hidden until connected) -->
+    <div class="chat-interface" id="chat-interface">
+
+      <!-- Messages -->
+      <div class="chat-messages" id="chat-messages"></div>
+
+      <!-- Slide-in Structured Panel -->
+      <div class="chat-drawer" id="chat-drawer">
+        <button class="chat-drawer__close" id="chat-drawer-close">&times;</button>
+        <div class="chat-structured-panel" id="chat-structured-panel"></div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="chat-input-area">
+        <textarea id="chat-input" rows="1" placeholder="Describe how you've been feeling..." disabled></textarea>
+        <button class="chat-panel-toggle" id="chat-panel-toggle" title="Toggle assessment panel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+          <span class="panel-badge" id="panel-badge">0/9</span>
+        </button>
+        <button class="chat-send-btn" id="chat-send-btn" disabled title="Send message">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TAB 3: DATABASE EXPLORER
        ============================================================ -->
   <div id="panel-database" class="tab-panel">
     <div class="db-toolbar">
